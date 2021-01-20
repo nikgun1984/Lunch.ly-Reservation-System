@@ -18,6 +18,9 @@
 				color: red;
 				cursor: pointer;
 			}
+			.is-hidden {
+				display: none;
+			}
 		</style>
 		<title>Lunch.ly {% block title %}{% endblock %}</title>
 	</head>
@@ -55,18 +58,8 @@
 				{% block content %}{% endblock %}
 			</div>
 		</div>
-		<script>
-			$(document).on("click", "i.fas.fa-edit", function () {
-				const li = $(this).closest("li");
-				console.log("Im in edit");
-				const id = parseInt($(this).closest("li").attr("id"));
-				console.log(id);
-				// const text = $(this).closest("b").children()[1].textContent;
-				// console.log(text);
-				// const amount = $(this).closest("tr").children()[2].textContent;
-				// console.log(amount);
-				// const res = await axios.patch(`/items/${id}`, { product, amount });
-			});
-		</script>
+		<script src="https://unpkg.com/axios/dist/axios.js"></script>
+		<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+		<script src="/js/script.js"></script>
 	</body>
 </html>

@@ -20,14 +20,23 @@
 			</li>
 			{% endfor %}
 		</ul>
+		<p id="back-to-add" class="is-hidden">
+			<a class="btn btn-primary" href="/{{ customer.id }}/edit/"
+				>Back to Add Reservation</a
+			>
+		</p>
 		{% else %}
 		<p>None!</p>
 		{% endif %}
 	</div>
 
 	<div class="col-6">
-		<h3>New Reservation</h3>
-		<form action="/{{ customer.id }}/add-reservation/" method="POST">
+		<h3 id="new-reservation">New Reservation</h3>
+		<form
+			action="/{{ customer.id }}/add-reservation/"
+			method="POST"
+			id="add-form"
+		>
 			<div class="form-group">
 				<label for="start">Start</label>
 				<input
@@ -51,7 +60,7 @@
 				<label for="notes">Notes:</label>
 				<textarea class="form-control" name="notes" id="notes"></textarea>
 			</div>
-			<button class="btn btn-primary">Add</button>
+			<button class="btn btn-primary add">Add</button>
 		</form>
 	</div>
 </div>

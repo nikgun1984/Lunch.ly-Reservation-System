@@ -38,6 +38,35 @@ class Reservation {
 		return results.rows.map((row) => new Reservation(row));
 	}
 
+	static async getById(id) {
+		const result = await db.query(
+			`SELECT customer_id, start_at, num_guests, notes FROM reservations WHERE id=$1`,
+			[id]
+		);
+		console.log("-------------------------------------------");
+		console.log(result.rows);
+		if (result.rows.length === 0) {
+			throw new Error(`No such reservation: ${id}`);
+		}
+		let r = result.rows[0];
+		// console.log(r);
+		// const res = new Reservation({
+		// 	id,
+		// 	customerId: +r.customer_id,
+		// 	startAt: r.start_at,
+		// 	numGuests: +r.num_guests,
+		// 	notes: r.notes,
+		// });
+		// console.log(res);
+		return new Reservation({
+			id,
+			customerId: +r.customer_id,
+			startAt: r.start_at,
+			numGuests: +r.num_guests,
+			notes: r.notes,
+		});
+	}
+
 	async save() {
 		if (this.id === undefined) {
 			const result = await db.query(

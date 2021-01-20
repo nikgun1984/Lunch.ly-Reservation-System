@@ -9,30 +9,32 @@ const app = express();
 
 // Parse body for urlencoded (non-JSON) data
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(`${__dirname}/public`));
 
 nunjucks.configure("templates", {
-  autoescape: true,
-  express: app
+	autoescape: true,
+	express: app,
 });
 
+app.get("/favicon.ico", (req, res) => res.sendStatus(204));
 app.use(routes);
 
 /** 404 handler */
 
-app.use(function(req, res, next) {
-  const err = new Error("Not Found");
-  err.status = 404;
+app.use(function (req, res, next) {
+	const err = new Error("Not Found");
+	err.status = 404;
 
-  // pass the error to the next piece of middleware
-  return next(err);
+	// pass the error to the next piece of middleware
+	return next(err);
 });
 
 /** general error handler */
 
 app.use((err, req, res, next) => {
-  res.status(err.status || 500);
+	res.status(err.status || 500);
 
-  return res.render("error.html", { err });
+	return res.render("error.html", { err });
 });
 
 module.exports = app;
