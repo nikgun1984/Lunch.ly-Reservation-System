@@ -15,6 +15,38 @@ class Reservation {
 		this.notes = notes;
 	}
 
+	get notes() {
+		return this._notes;
+	}
+
+	set notes(val) {
+		if (!val) {
+			this._notes = "";
+		} else {
+			this._notes = val;
+		}
+	}
+
+	get numGuests() {
+		return this._numGuests;
+	}
+
+	set numGuests(val) {
+		if (val < 1) {
+			throw Error("Gotta be at least 1 guest!!!");
+		} else {
+			this._numGuests = val;
+		}
+	}
+
+	get startAt() {
+		return this._startAt;
+	}
+
+	set startAt(val) {
+		this._startAt = new Date(val);
+	}
+
 	/** formatter for startAt */
 
 	getformattedStartAt() {
@@ -49,15 +81,7 @@ class Reservation {
 			throw new Error(`No such reservation: ${id}`);
 		}
 		let r = result.rows[0];
-		// console.log(r);
-		// const res = new Reservation({
-		// 	id,
-		// 	customerId: +r.customer_id,
-		// 	startAt: r.start_at,
-		// 	numGuests: +r.num_guests,
-		// 	notes: r.notes,
-		// });
-		// console.log(res);
+
 		return new Reservation({
 			id,
 			customerId: +r.customer_id,

@@ -14,6 +14,18 @@ class Customer {
 		this.notes = notes;
 	}
 
+	get notes() {
+		return this._notes;
+	}
+
+	set notes(val) {
+		if (!val) {
+			this._notes = "";
+		} else {
+			this._notes = val;
+		}
+	}
+
 	/** find all customers. */
 
 	static async all() {
@@ -53,6 +65,35 @@ class Customer {
 		return new Customer(customer);
 	}
 
+	static async search(query) {
+		const results = await db.query(
+			`SELECT id, 
+         	first_name AS "firstName",  
+         	last_name AS "lastName", 
+         	phone, 
+         	notes
+			FROM customers
+			WHERE first_name ILIKE '%${query}%'
+			ORDER BY last_name, first_name
+			`
+		);
+		return results.rows.map((c) => new Customer(c));
+	}
+
+	/** Get 10 Customers who made the most reservations*/
+
+	static async findBestCustomers() {
+		const results = await db.query(
+			`
+			SELECT c.id, first_name AS "firstName", last_name AS "lastName",phone,c.notes
+			FROM customers c
+			JOIN reservations ON c.id = reservations.customer_id
+			GROUP BY c.id ORDER BY COUNT(customer_id) DESC LIMIT 10;
+			`
+		);
+		return results.rows.map((c) => new Customer(c));
+	}
+
 	/** get all reservations for this customer. */
 
 	async getReservations() {
@@ -79,7 +120,7 @@ class Customer {
 		}
 	}
 
-	fullName() {
+	get fullName() {
 		return `${this.firstName} ${this.lastName}`;
 	}
 }
