@@ -8,7 +8,8 @@ CREATE TABLE customers (
     first_name text NOT NULL,
     last_name text NOT NULL,
     phone text,
-    notes text DEFAULT '' NOT NULL
+    notes text DEFAULT '' NOT NULL,
+    -- tokens TSVECTOR
 );
 
 CREATE TABLE reservations (
@@ -122,6 +123,10 @@ COPY public.customers (id, first_name, last_name, phone, notes) FROM stdin;
 99	Joshua	Cook	(475)724-2506x890	
 100	Michael	Hudson	\N	
 \.
+
+-- UPDATE customers c1  
+-- SET tokens = to_tsvector(c1.first_name)  
+-- FROM documents d2;
 
 COPY public.reservations (id, customer_id, start_at, num_guests, notes) FROM stdin;
 1	16	2018-09-08 12:20:07-07	2	Decade college home heart.

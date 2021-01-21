@@ -36,7 +36,7 @@ class Customer {
          phone, 
          notes
        FROM customers
-       ORDER BY last_name, first_name`
+       ORDER BY id`
 		);
 		return results.rows.map((c) => new Customer(c));
 	}
@@ -73,7 +73,7 @@ class Customer {
          	phone, 
          	notes
 			FROM customers
-			WHERE first_name ILIKE '%${query}%'
+			WHERE to_tsvector(first_name || ' ' || last_name) @@ to_tsquery('${query}')
 			ORDER BY last_name, first_name
 			`
 		);

@@ -7,8 +7,15 @@
 <h1>Customers</h1>
 
 <ul style="column-count: 4">
-  {% for customer in customers %}
-  <li><a href="/{{ customer.id }}/">{{ customer.fullName }}</a></li>
+  {% for i in range(customers|length) %}
+  <li><a href="/{{ customers[i].id }}/">{{ customers[i].fullName }}</a>
+    {% if reservations[i].id != None %}
+    <ul>
+      <li>{{reservations[i].getformattedStartAt()}}</li>
+      <li><b>{{reservations[i].numGuests}} guests</b></li>
+    </ul>
+    {% endif %}
+  </li>
   {% endfor %}
 </ul>
 

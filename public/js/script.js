@@ -3,9 +3,9 @@ $(document).on("click", "i.fas.fa-edit", async function () {
 	const reservation = await axios.get(`/reservation/${id}`);
 	$("#back-to-add").removeClass("is-hidden");
 	changeReservation(
-		reservation.data.startAt,
-		reservation.data.numGuests,
-		reservation.data.notes,
+		reservation.data._startAt,
+		reservation.data._numGuests,
+		reservation.data._notes,
 		"Edit Reservation",
 		"Edit",
 		`/${reservation.data.customerId}/edit-reservation/${id}`

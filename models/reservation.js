@@ -32,7 +32,7 @@ class Reservation {
 	}
 
 	set numGuests(val) {
-		if (val < 1) {
+		if (val < 1 && val !== null) {
 			throw Error("Gotta be at least 1 guest!!!");
 		} else {
 			this._numGuests = val;
@@ -53,6 +53,10 @@ class Reservation {
 		return moment(this.startAt).format("MMMM Do YYYY, h:mm a");
 	}
 
+	getRelativeTime() {
+		return moment(this.startAt).fromNow();
+	}
+
 	/** given a customer id, find their reservations. */
 
 	static async getReservationsForCustomer(customerId) {
@@ -63,10 +67,32 @@ class Reservation {
            start_at AS "startAt", 
            notes AS "notes"
          FROM reservations 
-         WHERE customer_id = $1`,
+		 WHERE customer_id = $1`,
 			[customerId]
 		);
 
+		return results.rows.map((row) => new Reservation(row));
+	}
+
+	/** Get the last Reservation for each customer */
+
+	static async getLastReservations() {
+		const results = await db.query(
+			`
+			SELECT c.id AS "customerId",
+			r.id AS "id",
+			r.notes AS "notes",
+			r.start_at AS "startAt",
+			r.num_guests AS "numGuests"
+			FROM customers c
+			LEFT JOIN (SELECT id, customer_id, notes, start_at, num_guests 
+			FROM reservations WHERE id IN (SELECT MAX(id) AS id
+			FROM reservations 
+			GROUP BY customer_id)) r
+			ON c.id=r.customer_id
+			ORDER BY c.id
+			`
+		);
 		return results.rows.map((row) => new Reservation(row));
 	}
 
@@ -75,8 +101,6 @@ class Reservation {
 			`SELECT customer_id, start_at, num_guests, notes FROM reservations WHERE id=$1`,
 			[id]
 		);
-		console.log("-------------------------------------------");
-		console.log(result.rows);
 		if (result.rows.length === 0) {
 			throw new Error(`No such reservation: ${id}`);
 		}

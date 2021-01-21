@@ -12,7 +12,8 @@ const router = new express.Router();
 router.get("/", async function (req, res, next) {
 	try {
 		const customers = await Customer.all();
-		return res.render("customer_list.html", { customers });
+		const reservations = await Reservation.getLastReservations();
+		return res.render("customer_list.html", { customers, reservations });
 	} catch (err) {
 		return next(err);
 	}
@@ -115,9 +116,7 @@ router.post("/:id/edit/", async function (req, res, next) {
 
 router.get("/reservation/:id", async function (req, res, next) {
 	let id = +req.params.id;
-	console.log("IN BACKEND");
 	let reservation = await Reservation.getById(id);
-	console.log(reservation);
 	return res.json(reservation);
 });
 
