@@ -36,9 +36,9 @@ jest -i
 
 ## Technologies Used
 
-> Bootstrap
-> Express and Node
-> PostgreSQL
+> Bootstrap    
+> Express and Node   
+> PostgreSQL  
 
 
 ## Contributing
